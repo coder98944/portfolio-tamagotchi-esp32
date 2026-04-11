@@ -1,0 +1,23 @@
+# Ignorar plan interno
+docs/plan_de_accion.md
+
+# Gemini / Antigravity data
+.gemini/
+
+# Android Studio / Gradle
+TamagotchiIoT/.gradle/
+TamagotchiIoT/build/
+TamagotchiIoT/app/build/
+TamagotchiIoT/local.properties
+TamagotchiIoT/.idea/
+
+# Arduino IDE
+*.bin
+*.elf
+*.hex
+
+# OS & Platform Artifacts
+.vscode/
+.pio/
+.DS_Store
+Thumbs.db

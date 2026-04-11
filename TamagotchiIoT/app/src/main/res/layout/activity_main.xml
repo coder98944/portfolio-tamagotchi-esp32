@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#121225"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <!-- HEADER -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INTERFAZ - APP TAMAGOTCHI"
+            android:textColor="#00E5FF"
+            android:fontFamily="monospace"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- IMAGE SECTION -->
+        <ImageView
+            android:layout_width="240dp"
+            android:layout_height="240dp"
+            android:layout_gravity="center"
+            android:src="@drawable/tamagotchi_image"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- STATUS BAR SECTION -->
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ESTADO: DESCONECTADO"
+            android:textColor="#FFFFFF"
+            android:fontFamily="monospace"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:progress="50"
+            android:progressTint="#00E5FF"
+            android:backgroundTint="#2C2C4E"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- MAIN ACTION BUTTONS -->
+        <Button
+            android:id="@+id/btn_connect"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="CONECTAR"
+            android:fontFamily="monospace"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:backgroundTint="#00E5FF"
+            android:textColor="#121225"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Vertical Action Buttons -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginBottom="32dp">
+
+            <Button
+                android:id="@+id/btn_feed"
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:text="COMER"
+                android:fontFamily="monospace"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:backgroundTint="#D81B60"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/btn_play"
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:text="JUGAR"
+                android:fontFamily="monospace"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:backgroundTint="#D81B60"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/btn_sleep"
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:text="DORMIR"
+                android:fontFamily="monospace"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:backgroundTint="#D81B60"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <!-- DEBUG / CHEAT SECTION (Styled Dark) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[ PARAMETROS ]"
+            android:textColor="#5C5C7E"
+            android:fontFamily="monospace"
+            android:textSize="12sp"
+            android:layout_marginBottom="16dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#1A1A2E"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tv_hunger_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="HAMBRE: 50%"
+                android:textColor="#00E5FF"
+                android:fontFamily="monospace"/>
+            <SeekBar
+                android:id="@+id/sb_hunger"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:progress="50"
+                android:progressTint="#00E5FF"
+                android:thumbTint="#00E5FF"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_play_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FELICIDAD: 50%"
+                android:textColor="#00E5FF"
+                android:fontFamily="monospace"/>
+            <SeekBar
+                android:id="@+id/sb_play"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:progress="50"
+                android:progressTint="#00E5FF"
+                android:thumbTint="#00E5FF"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_sleep_val"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ENERGIA: 50%"
+                android:textColor="#00E5FF"
+                android:fontFamily="monospace"/>
+            <SeekBar
+                android:id="@+id/sb_sleep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"
+                android:progress="50"
+                android:progressTint="#00E5FF"
+                android:thumbTint="#00E5FF"
+                android:layout_marginBottom="16dp"/>
+
+            <Button
+                android:id="@+id/btn_apply_cheat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="APLICAR CAMBIOS"
+                android:fontFamily="monospace"
+                android:backgroundTint="#2C2C4E"
+                android:textColor="#00E5FF"/>
+        </LinearLayout>
+
+        <!-- LOG -->
+        <TextView
+            android:id="@+id/tv_messages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="> SYSTEM READY"
+            android:textColor="#5C5C7E"
+            android:fontFamily="monospace"
+            android:textSize="12sp"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+</ScrollView>
