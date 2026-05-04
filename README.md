@@ -1,57 +1,99 @@
-# 🕹️ Tamagotchi IoT: Un Caso de Estudio en Arquitectura Embebida (ESP32)
+# Tamagotchi IoT (ESP32 + Android)
 
-![La Máquina en Acción](docs/images/Tamagotchi_IoT.png)
-> Cruce entre la nostalgia de los 90s y la severidad de la ingeniería embebida.
+Proyecto educativo y de portafolio que integra firmware embebido en ESP32 con una app nativa Android para controlar una mascota virtual en tiempo real por Bluetooth Classic (SPP), con manejo de permisos segun version de Android para mejorar compatibilidad entre equipos antiguos y modernos.
 
-Si creciste en los 90s, el Tamagotchi era magia. Si has crecido en la ingeniería de software, descubres que la verdadera magia ocurre cuando logras meter una Máquina de Estados, renderizado gráfico asíncrono y una red Bluetooth dentro de un chip con apenas 520 KB de RAM, y logras que todo funcione a la velocidad de la luz.
+![Tamagotchi IoT](docs/images/Tamagotchi_IoT.png)
 
-Este no es "un proyecto más". Es un **Caso de Estudio End-to-End** (Hardware Firmware + Aplicación Nativa Android) diseñado para desafiar los cuellos de botella térmicos, de memoria y de latencia del microcontrolador ESP32.
+## Que problema resuelve
 
----
+Este proyecto demuestra como disenar una arquitectura IoT funcional cuando el hardware tiene recursos limitados (RAM, CPU y ancho de banda), evitando bloqueos en UI y manteniendo interaccion fluida.
 
-## 🏗️ La Arquitectura (El Vuelo de Pájaro)
+## Para quien esta pensado
 
-Todo gran sistema escalable requiere un contrato estricto de funcionamiento para no romperse. El Firmware (C++) y el Cliente Android intercambian datos en tiempo real bajo esta topología:
+- Estudiantes que quieren aprender integracion real entre firmware y app movil.
+- Desarrolladores que quieren practicar arquitectura embebida con ESP32.
+- Equipos docentes o tecnicos que necesitan un ejemplo end-to-end reproducible.
+
+## Resultados tecnicos del enfoque
+
+- Control remoto de estados del Tamagotchi por Bluetooth Classic (SPP).
+- Logica desacoplada mediante FSM (Finite State Machine).
+- Protocolo de comandos de 1 byte para minimizar latencia.
+- Modo de pruebas (cheat mode) para QA rapido sin esperar ciclos largos.
+
+## Arquitectura general
 
 ```mermaid
 graph TD
-    subgraph ESP32 [ESP32 Embedded System]
-        A(Bluetooth RFCOMM) <-->|Serial Payload| B(NetworkMgr)
-        B --> C{Máquina de Estados - FSM}
-        C -->|State Change| D(Renderizado de Framebuffer SRAM)
-        D -->|Hardware SPI Bus| E[TFT XPT2046 Display]
-        F[Interrupción Táctil\nHardware IRQ] -->|I2C/SPI| D
-        C --> G(Status LEDs Invertidos)
+    subgraph ESP32["Sistema embebido ESP32"]
+        A["Bluetooth RFCOMM"] <-->|"Payload serial"| B["NetworkMgr"]
+        B --> C{"Maquina de estados (FSM)"}
+        C -->|"Cambio de estado"| D["Renderizado en framebuffer SRAM"]
+        D -->|"Bus SPI"| E["Pantalla TFT XPT2046"]
+        F["Interrupcion tactil (IRQ)"] -->|"I2C/SPI"| D
+        C --> G["LEDs de estado"]
     end
-    
-    subgraph Cliente Android
-        H[App Nativa Mobile] <-->|Bluetooth Classic| A
+
+    subgraph Android["Cliente Android"]
+        H["App nativa"] <-->|"Bluetooth Classic SPP"| A
     end
 ```
 
----
+## Estructura del repositorio
 
-## 📚 Entendiendo el Porqué (decisiones de diseño)
+- `Tamagotchi_sketch/`: firmware para ESP32 (Arduino).
+  - Archivo principal: `Tamagotchi_sketch/Tamagotchi_sketch.ino`
+  - Modulos clave: `Tamagotchi.cpp`, `NetworkMgr.cpp`
+- `TamagotchiIoT/`: proyecto Android Studio.
+  - App module: `TamagotchiIoT/app/`
+  - Entrada principal: `MainActivity.java`
+- `docs/`: documentacion de decisiones tecnicas.
 
-No basta con que el código funcione; **hay que saber *por qué* funciona y qué hay que sacrificar para lograrlo**. 
+## Requisitos
 
-Las decisiones que tomaron una mascota virtual lenta y la volvieron un dispositivo intensamente veloz y responsivo están explicadas como artículos:
+- ESP32
+- Pantalla TFT compatible con controlador XPT2046 (segun tu cableado)
+- Arduino IDE (o entorno compatible)
+- Android Studio
+- Telefono Android con Bluetooth
 
-### 1. 🧠 [La Lógica: Adiós al Código Espagueti](docs/logica_maquina_estados.md)
-¿Cómo programas a un ser que sufre hambre, duerme, puede interactuar y morir... sin escribir un abismo de `if/else`? Todo el núcleo vital no interactúa con la UI, sino que opera bajo una estructura asíncrona mediante la **Arquitectura FSM (Finite State Machine)**.
+## Guia rapida (uso de los 2 proyectos)
 
-### 2. 🔌 [La Memoria: El Truco de la Pantalla](docs/optimizacion_hardware_sram.md)
-Obligar a una placa de desarrollo económica a repintar toda una pantalla pixel por pixel causa un parpadeo visual tremendo. Aquí explico el concepto de  **"Secuestro de SRAM"** (Técnica de *Framebuffer* acelerada por SPI físico) que aplicó "esteroides" a la pantalla.
+1. **Cargar firmware en ESP32**
+- Abre `Tamagotchi_sketch/Tamagotchi_sketch.ino` en Arduino IDE.
+- Selecciona tu placa ESP32 y puerto serie.
+- Compila y sube el firmware.
 
-### 3. 📡 [La Red: JSON vs Bytes Puros en IoT](docs/protocolo_bluetooth_spp.md)
-El uso de texto largo y librerías modernas como JSON bloquean brutalmente el "Event-Loop" de chips pequeños. Esta lectura muestra por qué usar un payload de **1 solo Byte** salvó la latencia y revela cómo inyectar un mecanismo *"Backdoor"* o Modo Trampa de QA para automatizar testing de estrés logrando telemetría instantánea.
+2. **Abrir app Android**
+- Abre la carpeta `TamagotchiIoT/` en Android Studio.
+- Sincroniza Gradle y ejecuta la app en dispositivo fisico.
 
----
+3. **Emparejar y conectar**
+- Empareja el telefono con el ESP32 por Bluetooth.
+- Desde la app, conecta al dispositivo y envia comandos.
+- La app aplica manejo de permisos por version de Android (Android 12+ vs versiones anteriores).
 
-## 🔮 Evolución (Roadmap a v2.0)
+4. **Comandos de control (protocolo simple)**
+- `F`: alimentar
+- `P`: jugar
+- `S`: dormir
 
-Con la vista puesta la escalabilidad industrial a futuro, mi siguiente paso natural para este desarrollo es:
-1. **Modo Híbrido "Deep Sleep":** Convertir el estado *Dormido* de la mascota en un apagado extremo funcional del CPU (`ESP.deepSleep()`). La magia consistirá en usar el cable de la alarma física de la pantalla táctil (`XPT2046_IRQ`) como detonador por descarga (Wake-Up Device) para que el ESP despierte al toque de un dedo, extendiendo meses la vida útil para producción masiva.
+5. **Pruebas con cheat mode (QA)**
+- Envia por serial una trama con formato:
+- `#<hambre>,<felicidad>,<energia>\n`
+- Ejemplo: `#5,100,50`
 
----
-*«La verdadera perfección puede parecer primitiva, pero su utilidad es inagotable.» — Lao Tse*
+## Decisiones de ingenieria documentadas
+
+- [Diseno de la maquina de estados](docs/logica_maquina_estados.md)
+- [Optimizacion de memoria y framebuffer](docs/optimizacion_hardware_sram.md)
+- [Protocolo Bluetooth SPP y contrato de datos](docs/protocolo_bluetooth_spp.md)
+
+## Roadmap
+
+- Modo de bajo consumo con `deepSleep` y wake-up por interrupcion tactil.
+- Mejoras de telemetria para medir latencia de comandos y ciclos de estado.
+
+## Nota
+
+Este repositorio esta enfocado en aprendizaje aplicado y documentacion tecnica. La idea es que puedas modificar firmware y app para crear tu propia variante del Tamagotchi IoT.
